@@ -366,9 +366,9 @@ class SiteController extends Controller
                     throw new ErrorException(translate($serviceLimitation['message']));
 
                 $serviceStatus = ServiceStatus::Pending;
-                if ($request->payment_type == PaymentType::LocalPayment) {
-                    $serviceStatus = ServiceStatus::Processing;
-                }
+                // if ($request->payment_type == PaymentType::LocalPayment) {
+                //     $serviceStatus = ServiceStatus::Processing;
+                // }
                 //total service charge
                 $serviceTotalAmount = $serviceTotalAmount + $serviceCharge->fees;
 
@@ -382,13 +382,13 @@ class SiteController extends Controller
                     'end_time' => $serviceEndTime,
                     'sch_service_id' => $item->sch_service_id,
                     'status' => $serviceStatus,
-                    'service_amount' => $serviceCharge->fees,
+                    'service_amount' => 0,
                     'paid_amount' => 0,
                     'payment_status' => ServicePaymentStatus::Unpaid,
-                    'cmn_payment_type_id' => $request->payment_type,
+                    'cmn_payment_type_id' => 1,
                     'canceled_paid_amount' => 0,
                     'cancel_paid_status' => ServiceCancelPaymentStatus::Unpaid,
-                    'remarks' => $request->service_remarks,
+                    'remarks' => '',
                     'created_by' => $customerId
                 ];
             }
@@ -396,27 +396,27 @@ class SiteController extends Controller
             $payableAmount = $serviceTotalAmount;
             $couponDiscount = 0;
             //get voucher discount
-            if (UtilityRepository::emptyOrNullToZero($request->coupon_code) != 0) {
-                $couponRepo = new CouponRepository();
-                $couponDiscount = $couponRepo->validateAndGetCouponValue(auth()->id(), $request->coupon_code, $serviceTotalAmount);
-            }
-            if ($couponDiscount > 0) {
-                $payableAmount = $payableAmount - $couponDiscount;
-            } else {
-                $couponDiscount = 0;
-            }
+            // if (UtilityRepository::emptyOrNullToZero($request->coupon_code) != 0) {
+            //     $couponRepo = new CouponRepository();
+            //     $couponDiscount = $couponRepo->validateAndGetCouponValue(auth()->id(), $request->coupon_code, $serviceTotalAmount);
+            // }
+            // if ($couponDiscount > 0) {
+            //     $payableAmount = $payableAmount - $couponDiscount;
+            // } else {
+            //     $couponDiscount = 0;
+            // }
 
             $serviceBookingInfo = SchServiceBookingInfo::create([
                 'booking_date' => Carbon::now(),
                 'cmn_customer_id' => $customerId,
-                'total_amount' => $serviceTotalAmount,
-                'payable_amount' => $payableAmount,
+                'total_amount' => 0.0,
+                'payable_amount' => 0,
                 'paid_amount' => 0,
-                'due_amount' => $payableAmount,
+                'due_amount' => 0,
                 'is_due_paid' => 0,
-                'coupon_code' => $request->coupon_code,
+                'coupon_code' => '',
                 'coupon_discount' => $couponDiscount,
-                'remarks' => $request->service_remarks,
+                'remarks' => '',
                 'created_by' => auth()->id()
             ]);
             $serviceBookingInfo->serviceBookings()->attach($serviceList);
@@ -446,22 +446,22 @@ class SiteController extends Controller
                 ]
             );
 
-            if ($request->payment_type == PaymentType::LocalPayment) {
-                return $this->apiResponse(['status' => 1, 'paymentType' => 'localPayment', 'data' => "successfully save"], 200);
-            } else {
-                //this is for fontend
-                $paymentTypeForRtrn = 'paypal';
-                if ($request->payment_type == PaymentType::Stripe)
-                    $paymentTypeForRtrn = 'stripe';
-                else if ($request->payment_type == PaymentType::Paypal)
-                    $paymentTypeForRtrn = 'paypal';
-                else if ($request->payment_type == PaymentType::UserBalance)
-                    $paymentTypeForRtrn = 'userBalance';
+            // if ($request->payment_type == PaymentType::LocalPayment) {
+            //     return $this->apiResponse(['status' => 1, 'paymentType' => 'localPayment', 'data' => "successfully save"], 200);
+            // } else {
+            //     //this is for fontend
+            //     $paymentTypeForRtrn = 'paypal';
+            //     if ($request->payment_type == PaymentType::Stripe)
+            //         $paymentTypeForRtrn = 'stripe';
+            //     else if ($request->payment_type == PaymentType::Paypal)
+            //         $paymentTypeForRtrn = 'paypal';
+            //     else if ($request->payment_type == PaymentType::UserBalance)
+            //         $paymentTypeForRtrn = 'userBalance';
 
-                $paymentRepo = new PaymentRepository();
-                $return = $paymentRepo->makePayment($request->payment_type, $payableAmount, PaymentFor::ServiceCharge, $serviceBookingInfo->id);
-                return $this->apiResponse(['status' => 1, 'paymentType' => $paymentTypeForRtrn, 'data' => ['serviceBookingId' => $serviceBookingInfo->id, 'returnUrl' => $return]], 200);
-            }
+            //     $paymentRepo = new PaymentRepository();
+            //     $return = $paymentRepo->makePayment($request->payment_type, $payableAmount, PaymentFor::ServiceCharge, $serviceBookingInfo->id);
+            //     return $this->apiResponse(['status' => 1, 'paymentType' => $paymentTypeForRtrn, 'data' => ['serviceBookingId' => $serviceBookingInfo->id, 'returnUrl' => $return]], 200);
+            // }
         } catch (ErrorException $ex) {
             DB::rollBack();
             return $this->apiResponse(['status' => '-501', 'data' => $ex->getMessage()], 400);
@@ -642,20 +642,10 @@ class SiteController extends Controller
             $carts = collect(session()->get('user_cart'));
             $payableAmount = round($carts->sum('total_price'), 2);
 
-            //this is for fontend
-            $paymentTypeForRtrn = 'paypal';
-            if ($request->payment_type == PaymentType::Stripe) {
-                $paymentTypeForRtrn = 'stripe';
-            } else if ($request->payment_type == PaymentType::Paypal) {
-                $paymentTypeForRtrn = 'paypal';
-            } else if ($request->payment_type == PaymentType::UserBalance) {
-                throw new ErrorException(translate("You can't make payment by user balance"));
-            } else if ($request->payment_type == PaymentType::LocalPayment) {
-                throw new ErrorException(translate("You can't make payment by Cash"));
-            }
+            $payment_type='paypal';
             $paymentRepo = new PaymentRepository();
-            $return = $paymentRepo->makePayment($request->payment_type, $payableAmount, PaymentFor::OrderPayment, 0);
-            return $this->apiResponse(['status' => 1, 'paymentType' => $paymentTypeForRtrn, 'data' => ['serviceBookingId' => 0, 'returnUrl' => $return]], 200);
+            $return = $paymentRepo->makePayment($payment_type, $payableAmount, PaymentFor::OrderPayment, 0);
+            return $this->apiResponse(['status' => 1, 'paymentType' => $payment_type, 'data' => ['serviceBookingId' => 0, 'returnUrl' => $return]], 200);
         } catch (ErrorException $ex) {
             return $this->apiResponse(['status' => '-501', 'data' => $ex->getMessage()], 400);
         } catch (Exception $qx) {

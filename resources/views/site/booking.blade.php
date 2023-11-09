@@ -195,6 +195,22 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="race" class="float-start">{{translate('Race')}} *</label>
+                                                <input type="text" id="race" name="race" class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="color" class="float-start">{{translate('Color')}} *</label>
+                                                <input type="text" id="color" name="color" class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="micro" class="float-start">{{translate('N Microchip')}} *</label>
+                                                <input type="text   " id="micro" name="micro" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
                                     {{-- <div class="col-md-12">
                                         <div class="row">
                                             <div class="col-md-4">
