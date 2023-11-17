@@ -33,6 +33,7 @@ Route::group(['middleware' => 'xssProtection'], function () {
         Route::get('choose-payment-method/{bookingId?}', [App\Http\Controllers\Site\WebsiteController::class, 'choosePaymentMethod'])->name('choose.payment.method');
 
         Route::get('/', [App\Http\Controllers\Site\SiteController::class, 'index'])->name('site.home');
+        Route::get('booking-complete', [App\Http\Controllers\Site\SiteController::class, 'bookingComplete'])->name('booking.complete');
         Route::post('save-site-service-booking', [App\Http\Controllers\Site\SiteController::class, 'saveBooking'])->name('save.site.service.booking');
         Route::get('paypal-payment-done', [App\Http\Controllers\Payment\PaypalController::class, 'done'])->name('paypal.payment.done');
         Route::get('payment-complete', [App\Http\Controllers\Site\SiteController::class, 'paymentComplete'])->name('payment.complete');

@@ -119,7 +119,7 @@
                                                     <th>{{translate('Date')}}</th>
                                                     <th>{{translate('Time')}}</th>
                                                     {{-- <th>{{translate('Fee')}}</th> --}}
-                                                    <th class="text-center">{{translate('Opt')}}</th>
+                                                    {{-- <th class="text-center">{{translate('Opt')}}</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody class="text-start" id="iSelectedServiceList"></tbody>
@@ -187,28 +187,67 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="specie" class="float-start">{{translate('Specie')}} *</label>
-                                                <input type="text" id="specie" name="specie" class="form-control" />
+                                                {{-- <input type="text" id="specie" name="specie" class="form-control" /> --}}
+                                                <select class="form-select" id="specie" name="specie" >
+                                                    
+                                                    <option value="Canino" selected>Canino</option>
+                                                    <option value="Felino">Felino</option>
+                                                    <option value="Otro">Otro</option>
+                                                  </select>
                                             </div>
                                             <div class="col-md-4">
-                                                <label for="sex" class="float-start">{{translate('Sex')}} *</label>
-                                                <input type="text   " id="sex" name="sex" class="form-control" />
+                                                <label for="otro_esp" class="float-start">{{translate('Especifique Especie')}} </label>
+                                                <input type="text" id="otro_esp" name="otro_esp" class="form-control" />
                                             </div>
+                                            
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label for="race" class="float-start">{{translate('Race')}} *</label>
+                                                <label for="race" class="float-start">{{translate('Raza')}} </label>
                                                 <input type="text" id="race" name="race" class="form-control" />
                                             </div>
                                             <div class="col-md-4">
-                                                <label for="color" class="float-start">{{translate('Color')}} *</label>
+                                                <label for="color" class="float-start">{{translate('Color')}} </label>
                                                 <input type="text" id="color" name="color" class="form-control" />
                                             </div>
                                             <div class="col-md-4">
-                                                <label for="micro" class="float-start">{{translate('N Microchip')}} *</label>
+                                                <label for="micro" class="float-start">{{translate('N Microchip')}} </label>
                                                 <input type="text   " id="micro" name="micro" class="form-control" />
                                             </div>
+                                            
+                                           
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="state" class="float-start">{{translate('Est. Reproductivo')}} *</label>
+                                                <select class="form-select"  id="state" name="state" >
+                                                    
+                                                    <option value="Enter@" selected>Enter@</option>
+                                                    <option value="Castrado antes de los 6 meses(primer celo)">Castrado antes de los 6 meses(primer celo)</option>
+                                                    <option value="Castrado despues de los 6 meses(primer celo)">Castrado despues de los 6 meses(primer celo)</option>
+                                                    <option value="No lo sé">No lo sé</option>
+                                                  </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="nac" class="float-start">{{translate('Nac Estimado')}} </label>
+                                                <input type="text" id="nac" name="nac" class="form-control" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="sex" class="float-start">{{translate('Sexo')}} </label>
+                                                {{-- <input type="text   " id="sex" name="sex" class="form-control" /> --}}
+                                                <select class="form-select"  id="sex" name="sex" >
+                                                    
+                                                    <option value="Macho" selected>Macho</option>
+                                                    <option value="Hembra">Hembra</option>
+                                                  </select>
+                                            </div>
+                                            
+                                          
                                         </div>
                                     </div>
                                     {{-- <div class="col-md-12">

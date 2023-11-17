@@ -34,6 +34,7 @@ use App\Http\Repository\Settings\SettingsRepository;
 use App\Http\Repository\SmsNotification\SmsNotificationRepository;
 use App\Http\Repository\UtilityRepository;
 use App\Models\Booking\SchServiceBookingInfo;
+use App\Models\Customer\CmnPet;
 use App\Models\Employee\SchEmployeeService;
 use App\Models\Services\SchServiceCategory;
 use App\Models\Settings\CmnBusinessHoliday;
@@ -77,6 +78,12 @@ class SiteController extends Controller
             'redirect_text' => 'Go to dashboard'
         ];
         return view('site.success', ['data' => $data]);
+    }
+
+    public function bookingComplete()
+    {
+        
+        return view('site.finishbooking');
     }
     public function unsuccessfulPayment()
     {
@@ -326,14 +333,28 @@ class SiteController extends Controller
                 $saveCustomer = [
                     'full_name' => $request->full_name,
                     'phone_no' => $request->phone_no,
-                    'email' => $request->email,
-                    // 'state' => $request->state,
-                    // 'postal_code' => $request->postal_code,
-                    // 'city' => $request->city,
+                    'email' => $request->email 
+
                     // 'street_address' => $request->street_address
                 ];
                 $cstRtrn = CmnCustomer::create($saveCustomer);
                 $customerId = $cstRtrn->id;
+
+                $savePet= [
+                    'id_dueno' => $customerId ,
+                    'nombre' => $request->pet_name,
+                    'especie' => $request->specie,
+                    'sexo' => $request->sex,
+                    'created_by' => 1,
+                    'raza' => $request->race,
+                    'color' => $request->color,
+                    'micro_num' => $request->micro,
+                    'estado_repro' => $request->state,
+                    'pet_birth_date' => $request->nac
+                    //'sexo' => $request->sex
+                ];
+                $petRtn = CmnPet::create($savePet);
+                $petId = $petRtn->id;
 
             }
 
@@ -381,7 +402,7 @@ class SiteController extends Controller
                     'start_time' => $serviceStartTime,
                     'end_time' => $serviceEndTime,
                     'sch_service_id' => $item->sch_service_id,
-                    'status' => $serviceStatus,
+                    'status' => 1,
                     'service_amount' => 0,
                     'paid_amount' => 0,
                     'payment_status' => ServicePaymentStatus::Unpaid,
@@ -462,6 +483,8 @@ class SiteController extends Controller
             //     $return = $paymentRepo->makePayment($request->payment_type, $payableAmount, PaymentFor::ServiceCharge, $serviceBookingInfo->id);
             //     return $this->apiResponse(['status' => 1, 'paymentType' => $paymentTypeForRtrn, 'data' => ['serviceBookingId' => $serviceBookingInfo->id, 'returnUrl' => $return]], 200);
             // }
+            return $this->apiResponse(['status' => 1, 'paymentType' => 'localPayment', 'data' => "successfully save"], 200);
+            //return $this->apiResponse(['status' => 1, 'paymentType' => 'paypal', 'data' => ['serviceBookingId' => $serviceBookingInfo->id, 'returnUrl' => $return]], 200);
         } catch (ErrorException $ex) {
             DB::rollBack();
             return $this->apiResponse(['status' => '-501', 'data' => $ex->getMessage()], 400);

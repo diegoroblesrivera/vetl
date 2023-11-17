@@ -74170,7 +74170,7 @@ this.pdfMake = this.pdfMake || {}; this.pdfMake.vfs = {
 	
 	$.extend( extPagination, {
 		simple: function ( page, pages ) {
-			return [ 'previous', 'next' ];
+			return [ 'Anterior', 'Siguiente' ];
 		},
 	
 		full: function ( page, pages ) {

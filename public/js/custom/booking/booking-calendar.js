@@ -350,16 +350,29 @@
             });
             BookingManager.SetServiceProperty(startDate);
         },
+        // SetServiceProperty: function (startDate, time) {
+        //     let longDate = moment(startDate).format('dddd, MMMM, DD, yyyy');
+        //     $("#serviceDate").val(JsManager.DateFormatDefault(startDate));
+        //     $("#divDaysName").text(longDate);
+        //     if (time) {
+        //         $("#iSelectedServiceText").text("You've Selected " + time + " On " + longDate);
+        //     } else {
+        //         $("#iSelectedServiceText").text("Has seleccionado " + longDate);
+        //     }
+        // },
+
         SetServiceProperty: function (startDate, time) {
-            let longDate = moment(startDate).format('dddd, MMMM, DD, yyyy');
+            // Configurar moment en español
+            let longDate = moment(startDate).locale('es').format('dddd, MMMM, DD, yyyy');
             $("#serviceDate").val(JsManager.DateFormatDefault(startDate));
             $("#divDaysName").text(longDate);
             if (time) {
-                $("#iSelectedServiceText").text("You've Selected " + time + " On " + longDate);
+                $("#iSelectedServiceText").text("Has Seleccionado " + time + " el " + longDate);
             } else {
-                $("#iSelectedServiceText").text("You've Selected " + longDate);
+                $("#iSelectedServiceText").text("Has Seleccionado " + longDate);
             }
         },
+        
         LoadBranchDropDown: function () {
             var jsonParam = '';
             var serviceUrl = "get-branch-dropdown";

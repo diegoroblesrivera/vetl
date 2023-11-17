@@ -600,7 +600,7 @@ var datetimepickerFactory = function ($) {
 		hours12: false,
 		next: 'xdsoft_next',
 		prev : 'xdsoft_prev',
-		dayOfWeekStart: 0,
+		dayOfWeekStart: 1,
 		parentID: 'body',
 		timeHeightInTimePicker: 25,
 		timepickerScrollbar: true,
@@ -643,8 +643,8 @@ var datetimepickerFactory = function ($) {
 
 	var dateHelper = null,
 		defaultDateHelper = null,
-		globalLocaleDefault = 'en',
-		globalLocale = 'en';
+		globalLocaleDefault = 'es',
+		globalLocale = 'es';
 
 	var dateFormatterOptionsDefault = {
 		meridiem: ['AM', 'PM']
@@ -1262,7 +1262,7 @@ var datetimepickerFactory = function ($) {
 				}
 
 				if (isNaN(options.dayOfWeekStart)) {
-					options.dayOfWeekStart = 0;
+					options.dayOfWeekStart = 1;
 				} else {
 					options.dayOfWeekStart = parseInt(options.dayOfWeekStart, 10) % 7;
 				}

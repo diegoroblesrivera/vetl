@@ -44,7 +44,7 @@
                     if (jsonData.status == 1) {
                         callback(jsonData.data);
                     } else {
-                        callback("US");
+                        callback("CL");
                     }
                 }
                 function onFailed(xhr, status, err) {
@@ -79,6 +79,27 @@
 
         $("#frmModal").modal('show');
     });
+
+        //show customer pets
+        $(document).on('click', '.petTableEdit', function () {
+            var rowData = dTable.row($(this).parent()).data();
+            _id = rowData.id;
+            $('#full_name').val(rowData.full_name);
+            $('#user_id').val(rowData.user_id);
+            $('#country_code').val(rowData.country_code);
+            initTelephone.setNumber('+' + rowData.phone_no)
+            $('#email').val(rowData.email);
+            $('#dob').val(rowData.dob);
+            $('#country').val(rowData.country);
+            $('#state').val(rowData.state);
+            $('#postal_code').val(rowData.postal_code);
+            $('#city').val(rowData.city);
+            $('#street_number').val(rowData.street_number);
+            $('#street_address').val(rowData.street_address);
+            $('#remarks').val(rowData.remarks);
+    
+            $("#petModal").modal('show');
+        });
 
 
     //delete
@@ -221,7 +242,7 @@
                             title: 'Customer List'
                         },
                         {
-                            text: '<i class="fa fa-print"></i> Print',
+                            text: '<i class="fa fa-print"></i> Imprimir',
                             className: 'btn btn-sm',
                             extend: 'print',
                             exportOptions: {
@@ -263,9 +284,9 @@
                         {
                             name: 'Option',
                             title: 'Option',
-                            width: 60,
+                            width: 100,
                             render: function (data, type, row) {
-                                return EventManager.DataTableCommonButton();
+                                return EventManager.DataTableCommonButtonPet();
                             }
                         },
                         {
@@ -287,12 +308,13 @@
                             data: 'dob',
                             name: 'dob',
                             title: 'Date of Birth'
-                        },
-                        {
-                            data: 'country',
-                            name: 'country',
-                            title: 'Country'
                         }
+                        // ,
+                        // {
+                        //     data: 'country',
+                        //     name: 'country',
+                        //     title: 'Country'
+                        // }
                     ],
                     fixedColumns: false,
                     data: data

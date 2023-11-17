@@ -164,6 +164,15 @@ function isValidEmail(email) {
 
     };
 
+    EventManager = {
+        DataTableCommonButtonPet: function () {
+            return '<button class="btn btn-primary btn-datatable btn-round float-left dTableEdit mr-2" title="Click to edit"><i class="fas fa-edit"></i></button>' +
+            '<button class="btn btn-success btn-datatable btn-round float-left petTableEdit mr-2" title="Click to edit"><i class="fas fa-heart"></i></button>' +
+                '<button class="btn btn-danger btn-datatable btn-round float-left dTableDelete" title="Click to delete"><i class="far fa-trash-alt"></i></button>';
+        }
+
+    };
+
     dTableManager = {
         dTableSerialNumber: function ($dataTable) {
             $dataTable.on('order.dt search.dt', function () {

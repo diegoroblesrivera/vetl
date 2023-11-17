@@ -8,6 +8,7 @@
     let currency = '';
     let subtotal = 0;
     var bookingList = [];
+    moment.locale('es');
 
     $(document).ready(function () {
         serviceStepar = $("#serviceStep").steps({
@@ -289,16 +290,30 @@
             });
             SiteManager.SetServiceProperty(startDate);
         },
+        // SetServiceProperty: function (startDate, time) {
+        //     let longDate = moment(startDate).format('dddd, MMMM, DD, yyyy');
+        //     $("#serviceDate").val(JsManager.DateFormatDefault(startDate));
+        //     $("#divDaysName").text(longDate);
+        //     if (time) {
+        //         $("#iSelectedServiceText").text("Has Seleccionado" + time + " On " + longDate);
+        //     } else {
+        //         $("#iSelectedServiceText").text("Has Seleccionado " + longDate);
+        //     }
+        // },
+
         SetServiceProperty: function (startDate, time) {
-            let longDate = moment(startDate).format('dddd, MMMM, DD, yyyy');
+           
+            // Configurar moment en español
+            let longDate = moment(startDate).locale('es').format('dddd, MMMM, DD, yyyy');
             $("#serviceDate").val(JsManager.DateFormatDefault(startDate));
             $("#divDaysName").text(longDate);
             if (time) {
-                $("#iSelectedServiceText").text("You've Selected " + time + " On " + longDate);
+                $("#iSelectedServiceText").text("Has Seleccionado " + time + " el " + longDate);
             } else {
-                $("#iSelectedServiceText").text("You've Selected " + longDate);
+                $("#iSelectedServiceText").text("Has Seleccionado " + longDate);
             }
         },
+        
         LoadServiceCategoryDropDown: function () {
             var jsonParam = '';
             var serviceUrl = "get-site-service-category";
@@ -408,12 +423,15 @@
                     full_name: $("#full_name").val(),
                     email: $("#email").val(),
                     phone_no: initTelephone.getNumber(),
+                    sex: $("#sex").val(),
+                    pet_name: $("#pet_name").val(),
+                    specie: $("#specie").val(),
+                    race: $("#race").val(),
+                    color: $("#color").val(),
+                    micro: $("#micro").val(),
                     state: $("#state").val(),
-                    city: $("#city").val(),
-                    postal_code: $("#postal_code").val(),
-                    street_address: $("#street_address").val(),
-                    service_remarks: $("#service_remarks").val(),
-                    coupon_code: $("#coupon_code").val(),
+                    nac: $("#nac").val(),
+                    sex: $("#sex").val(),
                     items: []
                 };
                 $.each(bookingList, function (i, v) {
@@ -438,8 +456,12 @@
                         Message.Success("save");
                         // Aquí se procesa la respuesta de éxito como sea necesario
                         // La lógica depende de cómo tu aplicación deba manejar el éxito.
+                       // serviceStepar.steps("next");
+                       
                         JsManager.EndProcessBar();
                         resolve(jsonData); // Resolver la promesa con los datos de respuesta
+                      
+                         window.location.href = 'booking-complete' ;//jsonData.data.returnUrl.data.links[1].href;
                     } else {
                         Message.Error("save");
                         JsManager.EndProcessBar();
